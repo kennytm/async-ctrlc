@@ -1,0 +1,25 @@
+[package]
+name = "async-ctrlc"
+version = "1.0.0"
+authors = ["kennytm <kennytm@gmail.com>"]
+edition = "2018"
+description = "Async wrapper of `ctrlc`"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/kennytm/async-ctrlc"
+repository = "https://github.com/kennytm/async-ctrlc"
+readme = "README.md"
+keywords = ["signal", "sigint", "ctrlc", "async"]
+categories = ["asynchronous"]
+
+[badges]
+maintenance = { status = "passively-maintained" }
+
+[dependencies]
+ctrlc = "3.1.3"
+
+[features]
+termination = ["ctrlc/termination"]
+
+[dev-dependencies]
+async-std = { version = "1.3.0", features = ["unstable", "attributes"] }
+libc = "0.2.66"
