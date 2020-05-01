@@ -3,6 +3,8 @@
 //! `async-ctrlc` is an async wrapper of the `ctrlc` crate.
 
 use ctrlc::{set_handler, Error};
+#[cfg(feature = "stream")]
+use futures_core::stream::Stream;
 use std::{
     future::Future,
     pin::Pin,
@@ -25,7 +27,7 @@ pub struct CtrlC {
 impl Future for CtrlC {
     type Output = ();
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-        if ACTIVE.load(Ordering::SeqCst) {
+        if ACTIVE.swap(false, Ordering::SeqCst) {
             Poll::Ready(())
         } else {
             let new_waker = Box::new(cx.waker().clone());
@@ -35,6 +37,14 @@ impl Future for CtrlC {
             }
             Poll::Pending
         }
+    }
+}
+
+#[cfg(feature = "stream")]
+impl Stream for CtrlC {
+    type Item = ();
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        self.poll(cx).map(Some)
     }
 }
 
