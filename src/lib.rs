@@ -2,7 +2,8 @@
 
 //! `async-ctrlc` is an async wrapper of the `ctrlc` crate.
 
-use ctrlc::{set_handler, Error};
+use ctrlc::set_handler;
+pub use ctrlc::Error;
 #[cfg(feature = "stream")]
 use futures_core::stream::Stream;
 use std::{
